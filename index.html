@@ -146,9 +146,12 @@
         }, 
         audio:{
           deviceId: srcAudio,
-          autoGainControl: document.querySelector('#autoGain').checked || false,
-          echoCancellation: document.querySelector('#echoCancel').checked || false,
-          noiseSuppression: document.querySelector('#noiseSuppress').checked || false
+          autoGainControl: false,
+          echoCancellation: false,
+          noiseSuppression: false
+          //autoGainControl: document.querySelector('#autoGain').checked || false,
+          //echoCancellation: document.querySelector('#echoCancel').checked || false,
+          //noiseSuppression: document.querySelector('#noiseSuppress').checked || false
         } 
       })
       .then(stream => {
