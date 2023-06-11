@@ -1,16 +1,16 @@
 {
-  "name": "passthru",
-  "version": "0.0.1",
-  "description": "A/V Capture and Passthrough",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron .",
-    "build": "electron-builder"
-  },
-  "author": "Rian Ruggles",
-  "license": "MIT",
-  "devDependencies": {
-    "electron": "^25.0.1",
-    "electron-builder": "^23.6.0"
-  }
+	"name": "passthru",
+	"version": "0.1.0",
+	"description": "A/V Capture and Passthrough",
+	"main": "main.js",
+	"scripts": {
+		"start": "electron .",
+		"build": "electron-builder"
+	},
+	"author": "Rian Ruggles",
+	"license": "MIT",
+	"devDependencies": {
+		"electron": "^25.0.1",
+		"electron-builder": "^23.6.0"
+	}
 }

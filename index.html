@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <video id="passThru" poster="/svg/passthru.png" autoplay></video>
+  <video id="passThru" autoplay></video>
 
   <!-- Settings Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -53,19 +53,28 @@
           <select id="videoInput" class="u-full-width" name="videoInput" onchange="setStream()">
             <option value="none" disabled selected>Video Input</option>
           </select>
-          <!--
+
           <br />
           <select id="videoResolution" class="u-full-width" name="videoResolution" onchange="setStream()">
-            <option value="none" selected>1920x1080 16:9</option>
+            <option value="432">768x432</option>
+            <option value="qhd">960x540 (QHD)</option>
+            <option value="vita">960x544 (PS Vita)</option>
+            <option value="720">1280x720</option>
+            <option value="1080" selected>1920x1080</option>
+            <option value="1440">2560x1440</option>
           </select>
           <select id="videoFPS" class="u-full-width" name="videoFPS" onchange="setStream()">
-            <option value="none" selected>FPS: Vertical Sync</option>
+            <option value="null">FPS: Vertical Sync</option>
+            <option value="60" selected>FPS: 60</option>
+            <option value="30">FPS: 30</option>
+            <option value="29">FPS: 29</option>
+            <option value="24">FPS: 24</option>
           </select>
           <select id="videoResize" class="u-full-width" name="videoResize" onchange="setStream()">
-            <option value="none" selected>Resize Mode: Crop & Scale</option>
-            <option value="none" selected>Resize Mode: None</option>
+            <option value="crop-and-scale" selected>Resize Mode: Crop & Scale</option>
+            <option value="none">Resize Mode: None</option>
           </select>
-          -->
+
         </div>
       </div>
       <div class="one-half column">
@@ -75,7 +84,7 @@
           <select id="audioInput" class="u-full-width" name="audioInput" onchange="setStream()">
             <option value="none" disabled selected>Audio Input</option>
           </select>
-          <!--
+
           <br />
           <input type="checkbox" id="autoGain" name="autoGain" value="false" onchange="setStream()">
           <label for="gainControl">Gain Control</label><br />
@@ -83,7 +92,7 @@
           <label for="echoCancel">Echo Cancellation</label><br>
           <input type="checkbox" id="noiseSuppress" name="noiseSuppress" value="false" onchange="setStream()">
           <label for="noiseSuppress">Noise Suppression</label>
-          -->
+
         </div>
       </div>
     </div>
@@ -101,6 +110,7 @@
   let autoGain = false;
   let echoCancel = false;
   let noiseSuppress = false;
+  let showMenu = true;
 
 
 
@@ -128,40 +138,38 @@
   }
 
 
-  //Selector for your <video> element
+  // Set Video Element
   const video = document.querySelector('#passThru');
     
   // SET STREAM
   function setStream() {
+    video.pause();
     srcAudio = document.querySelector('#audioInput').value;
     srcVideo = document.querySelector('#videoInput').value;
     if (srcVideo != "none") {
       window.navigator.mediaDevices.getUserMedia({ 
         video:{
           deviceId: srcVideo,
-          frameRate: 60,
-          width: {min: 768, ideal: 1920, max: 1920},
-          height: {min: 432, ideal: 1080, max: 1080},
-          resizeMode: "crop-and-scale"
+          frameRate: getFps(),
+          width: {min: 768, ideal: getResX(), max: 2560},
+          height: {min: 432, ideal: getResY(), max: 1440},
+          resizeMode: document.querySelector('#videoResize').value
         }, 
         audio:{
           deviceId: srcAudio,
-          autoGainControl: false,
-          echoCancellation: false,
-          noiseSuppression: false
-          //autoGainControl: document.querySelector('#autoGain').checked || false,
-          //echoCancellation: document.querySelector('#echoCancel').checked || false,
-          //noiseSuppression: document.querySelector('#noiseSuppress').checked || false
+          autoGainControl: document.querySelector('#autoGain').checked,
+          echoCancellation: document.querySelector('#echoCancel').checked,
+          noiseSuppression: document.querySelector('#noiseSuppress').checked
         } 
       })
       .then(stream => {
         video.srcObject = stream;
         video.onloadedmetadata = (e) => {
-          video.play();
+        video.play();
         };
       })
       .catch( () => {
-        alert('Something went wrong, PassThru may not have permission to access audio/video devices.');
+        alert('SetStream Error: Stream failed to initialize. Current settings may be incompatible with selected hardware sources.');
       });
     }
     if (srcAudio == "none") {
@@ -246,17 +254,31 @@
   //   Settings   //
   //////////////////
 
+  document.querySelector('.inputWrapper').addEventListener("click", function(evt) {
+    evt.stopPropagation();
+  });
+
+  document.querySelector('#settings').addEventListener("click", function(evt) {
+    evt.stopPropagation();
+  });
+
   // Settings UI
   let btnSettings = document.querySelector('#btnSettings');
   let settings = document.querySelector('#settings');
+  function closeSettings() {
+    btnSettings.classList.remove('icon-kb_return');
+    btnSettings.classList.add('icon-settings');
+    settings.style.opacity = 0;
+    settings.style.pointerEvents = "none";
+    inSettings = false;
+    setStream();
+  }
+  settings.onclick = function() {
+    closeSettings();
+  }
   btnSettings.onclick = function() {
     if (inSettings) {
-      btnSettings.classList.remove('icon-kb_return');
-      btnSettings.classList.add('icon-settings');
-      settings.style.opacity = 0;
-      settings.style.pointerEvents = "none";
-      inSettings = false;
-      setStream();
+      closeSettings();
     } else {
       btnSettings.classList.remove('icon-settings');
       btnSettings.classList.add('icon-kb_return');
@@ -266,19 +288,70 @@
     }
   }
 
-  // Audio Settings
-  // function toggleGain() {
-  //   autoGain = document.querySelector('#autoGain').checked;
-  //   setStream();
-  // }
-  // function toggleEcho() {
-  //   echoCancel = document.querySelector('#echoCancel').checked;
-  //   setStream();
-  // }
-  // function toggleNoise() {
-  //   noiseSuppress = document.querySelector('#noiseSuppress').checked;
-  //   setStream();
-  // }
+  function getFps() {
+    let videoFPS = document.querySelector('#videoFPS').value;
+    let fps = 60;
+    
+    if (videoFPS == "null") {
+      fps = null;
+    } else {
+      fps = Number(videoFPS)
+    }
+    return(fps);
+  }
+  
+  function getResX() {
+    let videoResolution = document.querySelector('#videoResolution').value;
+    switch(videoResolution) {
+      case "432":
+        return(768)
+        break;
+      case "qhd":
+        return(960)
+        break;
+      case "vita":
+        return(960)
+        break;
+      case "720":
+        return(1280)
+        break;
+      case "1080":
+        return(1920)
+        break;
+      case "1440":
+        return(2560)
+        break;
+      default:
+        return(1920)
+    } 
+  }
+
+  function getResY() {
+    let videoResolution = document.querySelector('#videoResolution').value;
+    switch(videoResolution) {
+      case "432":
+        return(432)
+        break;
+      case "qhd":
+        return(540)
+        break;
+      case "vita":
+        return(544)
+        break;
+      case "720":
+        return(720)
+        break;
+      case "1080":
+        return(1080)
+        break;
+      case "1440":
+        return(1440)
+        break;
+      default:
+        return(1080)
+    } 
+  }
+
 </script>
 </body>
 </html>
