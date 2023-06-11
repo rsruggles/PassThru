@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+  <title>PassThru</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/passthru.css">
+  <link rel="stylesheet" href="css/icons.css">
+
+</head>
+<body>
+
+  <!-- Primary App Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+  <div class="row menu">
+    <div class="one-half column">
+      <span id="btnSettings" class="icon-settings hfx"></span>
+      <span id="volWrapper" class="icon-volume_up hfx">
+        <input id="volSlider" type="range" min="0" max="1" value=".5" step=".01" class="">
+      </span>
+    </div>
+    <div class="one-half column txtRight">
+      <span id="appMin" class="icon-minimize hfx"></span>
+      <span id="appMax" class="icon-fullscreen hfx"></span>
+      <span id="appExit" class="icon-close hfx"></span>
+    </div>
+  </div>
+
+  <video id="passThru" poster="/svg/passthru.png" autoplay></video>
+
+  <!-- Settings Page Layout
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <div id="settings" class="row">
+    <div class="settingsWrapper">
+      <div class="one-half column">
+        <div class="inputWrapper gapLeft">
+          <span class="icon-videocam large margAuto"></span>
+          <br />
+          <select id="videoInput" class="u-full-width" name="videoInput" onchange="setStream()">
+            <option value="none" disabled selected>Video Input</option>
+          </select>
+          <br />
+          <select id="videoResolution" class="u-full-width" name="videoResolution" onchange="setStream()">
+            <option value="none" selected>1920x1080 16:9</option>
+          </select>
+          <select id="videoFPS" class="u-full-width" name="videoFPS" onchange="setStream()">
+            <option value="none" selected>FPS: Vertical Sync</option>
+          </select>
+          <select id="videoResize" class="u-full-width" name="videoResize" onchange="setStream()">
+            <option value="none" selected>Resize Mode: Crop & Scale</option>
+            <option value="none" selected>Resize Mode: None</option>
+          </select>
+        </div>
+      </div>
+      <div class="one-half column">
+        <div class="inputWrapper gapRight">
+          <span class="icon-mic large margAuto"></span>
+          <br />
+          <select id="audioInput" class="u-full-width" name="audioInput" onchange="setStream()">
+            <option value="none" disabled selected>Audio Input</option>
+          </select>
+          <br />
+          <input type="checkbox" id="autoGain" name="autoGain" value="false" onchange="setStream()">
+          <label for="gainControl">Gain Control</label><br />
+          <input type="checkbox" id="echoCancel" name="echoCancel" value="false" onchange="setStream()">
+          <label for="echoCancel">Echo Cancellation</label><br>
+          <input type="checkbox" id="noiseSuppress" name="noiseSuppress" value="false" onchange="setStream()">
+          <label for="noiseSuppress">Noise Suppression</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<script type="text/javascript">
+  const ipc = require('electron').ipcRenderer
+  let fullScreen = false
+  let inSettings = false
+  let srcAudio = "none";
+  let srcVideo = "none";
+  let autoGain = false;
+  let echoCancel = false;
+  let noiseSuppress = false;
+
+
+
+
+  if (!navigator.mediaDevices?.enumerateDevices) {
+    console.log("Something went wrong. You don't seem to have any applicable media devices.");
+  } else {
+    // List cameras and microphones.
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((devices) => {
+        devices.forEach((device) => {
+          console.log(`${device.kind}: ${device.label} id = ${device.deviceId}`);
+          if (device.kind == 'audioinput') {
+            document.querySelector('#audioInput').innerHTML += `<option value="`+ device.deviceId +`" >`+ device.label +`</option>`;
+          }
+          if (device.kind == 'videoinput') {
+            document.querySelector('#videoInput').innerHTML += `<option value="`+ device.deviceId +`" >`+ device.label +`</option>`;
+          }
+        });
+      })
+      .catch((err) => {
+        console.error(`${err.name}: ${err.message}`);
+      });
+  }
+
+
+  //Selector for your <video> element
+  const video = document.querySelector('#passThru');
+    
+  // SET STREAM
+  function setStream() {
+    srcAudio = document.querySelector('#audioInput').value;
+    srcVideo = document.querySelector('#videoInput').value;
+    if (srcVideo != "none") {
+      window.navigator.mediaDevices.getUserMedia({ 
+        video:{
+          deviceId: srcVideo,
+          frameRate: 60,
+          width: {min: 768, ideal: 1920, max: 1920},
+          height: {min: 432, ideal: 1080, max: 1080},
+          resizeMode: "crop-and-scale"
+        }, 
+        audio:{
+          deviceId: srcAudio,
+          autoGainControl: document.querySelector('#autoGain').checked || false,
+          echoCancellation: document.querySelector('#echoCancel').checked || false,
+          noiseSuppression: document.querySelector('#noiseSuppress').checked || false
+        } 
+      })
+      .then(stream => {
+        video.srcObject = stream;
+        video.onloadedmetadata = (e) => {
+          video.play();
+        };
+      })
+      .catch( () => {
+        alert('Something went wrong, PassThru may not have permission to access audio/video devices.');
+      });
+    }
+    if (srcAudio == "none") {
+      video.muted = true;
+    } else {
+      video.muted = false;
+    }
+  }
+    
+
+  ////////////////////////
+  //    App Controls    //
+  ////////////////////////
+
+  // Minimize
+  document.querySelector('#appMin').onclick = function() {
+    ipc.send('minimize');
+  }
+
+  // Maximize
+  document.querySelector('#appMax').onclick = function() {
+    if (fullScreen) {
+      this.classList.add('icon-fullscreen')
+      this.classList.remove('icon-fullscreen_exit');
+      ipc.send('windowScreen');
+      fullScreen = false
+    } else {
+      this.classList.add('icon-fullscreen_exit')
+      this.classList.remove('icon-fullscreen');
+      ipc.send('fullScreen');
+      fullScreen = true
+    }
+  }
+
+  // Exit
+  document.querySelector('#appExit').onclick = function() {
+    ipc.send('close');
+  }
+
+  // Volume
+  let volWrapper = document.querySelector('#volWrapper');
+  let volSlider = document.querySelector('#volSlider');
+  let volume = volSlider.value;
+  let allowMute = true;
+  volWrapper.onmouseover = function() {
+    volSlider.style.width = '100px';
+    volSlider.style.opacity = '1';
+  }
+  volWrapper.onmouseout = function() {
+    volSlider.style.width = '0px';
+    volSlider.style.opacity = '0';
+  }
+  volSlider.oninput = function() {
+    volume = volSlider.value;
+    updateVolume();        
+  }
+  volSlider.onmouseover = function(){allowMute = false}
+  volSlider.onmouseout = function(){allowMute = true}
+  volWrapper.onmouseup = function() {
+    if ((volume > 0) && allowMute) {
+      volume = 0;
+    } else {
+      volume = volSlider.value;
+    }
+    updateVolume();
+  }
+
+  function updateVolume() {
+    if (volume == 0) {
+      volWrapper.classList.remove('icon-volume_up');
+      volWrapper.classList.add('icon-volume_off');
+      volSlider.style.filter = 'saturate(10%)';
+    } else {
+      volWrapper.classList.remove('icon-volume_off');
+      volWrapper.classList.add('icon-volume_up');
+      volSlider.style.filter = 'saturate(1)';
+    }
+    video.volume = volume;
+  }
+
+  //////////////////
+  //   Settings   //
+  //////////////////
+
+  // Settings UI
+  let btnSettings = document.querySelector('#btnSettings');
+  let settings = document.querySelector('#settings');
+  btnSettings.onclick = function() {
+    if (inSettings) {
+      btnSettings.classList.remove('icon-kb_return');
+      btnSettings.classList.add('icon-settings');
+      settings.style.opacity = 0;
+      settings.style.pointerEvents = "none";
+      inSettings = false;
+      setStream();
+    } else {
+      btnSettings.classList.remove('icon-settings');
+      btnSettings.classList.add('icon-kb_return');
+      settings.style.opacity = 1;
+      settings.style.pointerEvents = "all";
+      inSettings = true;
+    }
+  }
+
+  // Audio Settings
+  // function toggleGain() {
+  //   autoGain = document.querySelector('#autoGain').checked;
+  //   setStream();
+  // }
+  // function toggleEcho() {
+  //   echoCancel = document.querySelector('#echoCancel').checked;
+  //   setStream();
+  // }
+  // function toggleNoise() {
+  //   noiseSuppress = document.querySelector('#noiseSuppress').checked;
+  //   setStream();
+  // }
+</script>
+</body>
+</html>
