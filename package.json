@@ -1,6 +1,6 @@
 {
 	"name": "passthru",
-	"version": "0.1.3",
+	"version": "0.1.4",
 	"description": "A/V Capture and Passthrough",
 	"main": "main.js",
 	"scripts": {
@@ -8,7 +8,7 @@
 		"build": "electron-builder"
 	},
 	"build": {
-		"appId": "passthru",
+		"appId": "PassThru",
 		"win": {
 			"target": [
 				"nsis"
@@ -21,10 +21,10 @@
 			"uninstallerIcon": "icon.ico",
 			"uninstallDisplayName": "passthru-uninstaller",
 			"license": "license.md",
-			"allowToChangeInstallationDirectory": true
+			"allowToChangeInstallationDirectory": false
 		}
 	},
-	"author": "Rian Ruggles",
+	"author": "Rian Scott",
 	"license": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License",
 	"devDependencies": {
 		"electron": "^25.0.1",
