@@ -20,11 +20,26 @@ video {
     pointer-events: none;
 }
 
+/*
+.magicDrag {
+    -webkit-app-region: drag;
+    background-color: #fd0505;
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: 200;
+}
+*/
+
 .menu {
     -webkit-app-region: drag;
     position: absolute;
     font-size: 2.5rem;
     background-color: rgb(15, 15, 15, .75);
+    top: 0px;
+    transition: top .3s ease-in-out;
     user-select: none;
     width: 100%;
     z-index: 10;

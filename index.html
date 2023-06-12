@@ -41,13 +41,14 @@
   </div>
 
   <video id="passThru" autoplay></video>
+  <div class="magicDrag"></div>
 
   <!-- Settings Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div id="settings" class="row">
     <div class="settingsWrapper">
       <div class="one-half column">
-        <div class="inputWrapper gapLeft">
+        <div id="videoWrapper" class="inputWrapper gapLeft">
           <span class="icon-videocam large margAuto"></span>
           <br />
           <select id="videoInput" class="u-full-width" name="videoInput" onchange="setStream()">
@@ -78,7 +79,7 @@
         </div>
       </div>
       <div class="one-half column">
-        <div class="inputWrapper gapRight">
+        <div id="audioWrapper" class="inputWrapper gapRight">
           <span class="icon-mic large margAuto"></span>
           <br />
           <select id="audioInput" class="u-full-width" name="audioInput" onchange="setStream()">
@@ -98,6 +99,7 @@
     </div>
   </div>
 
+
 <!-- End Document
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
@@ -107,13 +109,6 @@
   let inSettings = false
   let srcAudio = "none";
   let srcVideo = "none";
-  let autoGain = false;
-  let echoCancel = false;
-  let noiseSuppress = false;
-  let showMenu = true;
-
-
-
 
   if (!navigator.mediaDevices?.enumerateDevices) {
     console.log("Something went wrong. You don't seem to have any applicable media devices.");
@@ -136,12 +131,12 @@
         console.error(`${err.name}: ${err.message}`);
       });
   }
-
-
-  // Set Video Element
+  
+  ////////////////////
+  //   SET STREAM   //
+  ////////////////////
   const video = document.querySelector('#passThru');
-    
-  // SET STREAM
+
   function setStream() {
     video.pause();
     srcAudio = document.querySelector('#audioInput').value;
@@ -263,7 +258,11 @@
   //   Settings   //
   //////////////////
 
-  document.querySelector('.inputWrapper').addEventListener("click", function(evt) {
+  document.querySelector('#videoWrapper').addEventListener("click", function(evt) {
+    evt.stopPropagation();
+  });
+
+  document.querySelector('#audioWrapper').addEventListener("click", function(evt) {
     evt.stopPropagation();
   });
 
@@ -297,6 +296,7 @@
     }
   }
 
+  // Video Settings
   function getFps() {
     let videoFPS = document.querySelector('#videoFPS').value;
     let fps = 60;
@@ -360,6 +360,37 @@
         return(1080)
     } 
   }
+
+  // Hide Menu
+  var timeout;
+  var showMenu = false;
+  let menu = document.querySelector('.menu');
+  //let magicDrag = document.querySelector('.magicDrag');
+  document.addEventListener("mousemove", hideMenu);
+  function hideMenu() {
+    if (timeout) {
+      clearTimeout(timeout);
+    }
+    timeout = setTimeout(function() {
+      if (!showMenu) {
+        if (!inSettings) {
+          //magicDrag.style.top = document.clientHeight + "px";
+          document.querySelector("body").style.cursor = "none";
+          menu.style.top = "-" + menu.clientHeight + "px";
+          showMenu = true;
+        }   
+      }
+      }, 3000);
+      if (showMenu) {
+        //magicDrag.style.top = menu.clientHeight + "px";
+        document.querySelector("body").style.cursor = "auto";
+        menu.style.top = "0px";
+        showMenu = false;
+      }
+  };
+
+  // Magic Drag
+  //magicDrag.style.top = menu.clientHeight + "px";
 
 </script>
 </body>
