@@ -1,16 +1,18 @@
 # PassThru - A/V Capture and Passthrough
 
-PassThru is a web application wrapped in Electron that allows you to choose the Video and Audio Input Source and displays it in a clean and optimized window. With PassThru, you have full control over the aspect ratio, frame rate, input sources, and window behavior. You can easily lock or unlock the aspect ratio, change the FPS, switch between different devices as the input source, toggle between fullscreen and maximize or minimize the window, and freely drag the window around your screen.
+PassThru is a web application built with Electron. It allows you to choose from your Video and Audio input sources and display a passthrouh output in a clean and optimized window. PassThru provides many options including frame rate, input sources, resolution and window resize behavior.
+
+Being a software solution, PassThru might introduce some latency, but that seems pretty dependant on hardware setups. I use it to dock my switch with a PICE capture card and don't have a noticable amount of latency, but your mileage may vary.
 
 ## Features
 
 - Choose Video and Audio Input Source
 - Clean and optimized window UI
-- Lock/unlock aspect ratio
 - Change the FPS (frame rate)
 - Switch between different input devices
 - Fullscreen/maximize or minimize the window
-- Drag the window anywhere on your screen
+- Change input resolution (only 16:9 for now)
+- Fill, Contain, or down-scale video image
 
 ## Dependencies
 
@@ -53,8 +55,8 @@ Thats it! You have successfully compiled PassThru into an executable application
 
 ## License
 
-PassThru is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License.
+PassThru is licensed under the [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
 ## Author
 
-PassThru is developed and maintained by Rian Scott.
+PassThru is developed and maintained by [rsruggles](https://github.com/rsruggles).

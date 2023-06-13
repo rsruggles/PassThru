@@ -1,6 +1,6 @@
 {
 	"name": "passthru",
-	"version": "0.1.5",
+	"version": "0.1.6",
 	"description": "A/V Capture and Passthrough",
 	"main": "main.js",
 	"scripts": {
@@ -24,7 +24,7 @@
 			"allowToChangeInstallationDirectory": false
 		}
 	},
-	"author": "Rian Scott",
+	"author": "rsruggles",
 	"license": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License",
 	"devDependencies": {
 		"electron": "^25.0.1",
