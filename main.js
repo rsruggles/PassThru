@@ -15,7 +15,7 @@ function createWindow() {
 
 
 
-    mainWindow.loadFile('index.html')
+    mainWindow.loadFile('render/index.html')
 
     ipcMain.on('msg', (e, data)=>{
         console.warn(data)

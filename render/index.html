@@ -15,8 +15,7 @@
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/husk.css">
   <link rel="stylesheet" href="css/passthru.css">
   <link rel="stylesheet" href="css/icons.css">
 
@@ -27,13 +26,13 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
   <div class="row menu">
-    <div class="one-half column">
+    <div class="col-6 ">
       <span id="btnSettings" class="icon-settings hfx"></span>
       <span id="volWrapper" class="icon-volume_up hfx">
         <input id="volSlider" type="range" min="0" max="1" value=".5" step=".01" class="">
       </span>
     </div>
-    <div class="one-half column txtRight">
+    <div class="col-6  txtRight">
       <span id="appMin" class="icon-minimize hfx"></span>
       <span id="appMax" class="icon-fullscreen hfx"></span>
       <span id="appExit" class="icon-close hfx"></span>
@@ -47,7 +46,7 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <div id="settings" class="row">
     <div class="settingsWrapper">
-      <div class="one-half column">
+      <div class="col-6 ">
         <div id="videoWrapper" class="inputWrapper gapLeft">
           <span class="icon-videocam large margAuto"></span>
           <br />
@@ -83,7 +82,7 @@
 
         </div>
       </div>
-      <div class="one-half column">
+      <div class="col-6 ">
         <div id="audioWrapper" class="inputWrapper gapRight">
           <span class="icon-mic large margAuto"></span>
           <br />
@@ -95,7 +94,7 @@
           <input type="checkbox" id="autoGain" name="autoGain" value="false" onchange="setStream()">
           <label for="gainControl">Gain Control</label><br />
           <input type="checkbox" id="echoCancel" name="echoCancel" value="false" onchange="setStream()">
-          <label for="echoCancel">Echo Cancellation</label><br>
+          <label for="echoCancel">Echo Cancellation</label><br />
           <input type="checkbox" id="noiseSuppress" name="noiseSuppress" value="false" onchange="setStream()">
           <label for="noiseSuppress">Noise Suppression</label>
 
