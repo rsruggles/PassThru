@@ -23,19 +23,6 @@ video {
   pointer-events: none;
 }
 
-/*
-.magicDrag {
-  -webkit-app-region: drag;
-  background-color: #fd0505;
-  position: absolute;
-  top: 0;
-  left: 0;
-  min-width: 100%;
-  min-height: 100%;
-  z-index: 200;
-}
-*/
-
 .menu {
   -webkit-app-region: drag;
   position: absolute;

@@ -43,7 +43,6 @@ function setStream() {
         width: {min: 768, ideal: getResX(), max: 2560},
         height: {min: 432, ideal: getResY(), max: 1440},
         resizeMode: "crop-and-scale"
-        //resizeMode: document.querySelector('#videoResize').value
       }, 
       audio:{
         deviceId: srcAudio,
@@ -265,7 +264,6 @@ videoResize.onchange = function() {
 var timeout;
 var showMenu = false;
 let menu = document.querySelector('.menu');
-//let magicDrag = document.querySelector('.magicDrag');
 document.addEventListener("mousemove", hideMenu);
 function hideMenu() {
   if (timeout) {
@@ -274,7 +272,6 @@ function hideMenu() {
   timeout = setTimeout(function() {
     if (!showMenu) {
       if (!inSettings) {
-        //magicDrag.style.top = document.clientHeight + "px";
         document.querySelector("body").style.cursor = "none";
         menu.style.top = "-" + menu.clientHeight + "px";
         showMenu = true;
@@ -282,12 +279,8 @@ function hideMenu() {
     }
   }, 3000);
   if (showMenu) {
-    //magicDrag.style.top = menu.clientHeight + "px";
     document.querySelector("body").style.cursor = "auto";
     menu.style.top = "0px";
     showMenu = false;
   }
 };
-
-// Magic Drag
-//magicDrag.style.top = menu.clientHeight + "px";
