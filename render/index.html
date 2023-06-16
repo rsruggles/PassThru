@@ -76,7 +76,15 @@
             <option value="none">Resize Mode: None</option>
             <option value="scale-down">Resize Mode: Scale Down</option>
           </select>
-
+          <select id="selRatio" class="u-full-width" name="selRatio">
+            <option value="unlocked">Aspect Ratio: Unlocked</option>
+            <option value="169" selected>Aspect Ratio: 16:9</option>
+            <option value="1610">Aspect Ratio: 16:10</option>
+          </select>
+          <!--
+          <input type="checkbox" id="hwAccel" name="hwAccel" value="true" checked onchange="">
+          <label for="hwAccel">Hardware Acceleration</label>
+          -->
         </div>
       </div>
       <div class="col-6 ">
@@ -86,7 +94,6 @@
           <select id="audioInput" class="u-full-width" name="audioInput" onchange="setStream()">
             <option value="none" disabled selected>Audio Input</option>
           </select>
-
           <br />
           <input type="checkbox" id="autoGain" name="autoGain" value="false" onchange="setStream()">
           <label for="gainControl">Gain Control</label><br />

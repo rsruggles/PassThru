@@ -1,4 +1,5 @@
-const ipc = require('electron').ipcRenderer
+const ipc = require('electron').ipcRenderer;
+
 let fullScreen = false
 let inSettings = false
 let srcAudio = "none";
@@ -33,6 +34,9 @@ const video = document.querySelector('#passThru');
 
 function setStream() {
   video.pause();
+  video.removeAttribute('src');
+  video.load();
+
   srcAudio = document.querySelector('#audioInput').value;
   srcVideo = document.querySelector('#videoInput').value;
   if (srcVideo != "none") {
@@ -42,7 +46,7 @@ function setStream() {
         frameRate: getFps(),
         width: {min: 768, ideal: getResX(), max: 2560},
         height: {min: 432, ideal: getResY(), max: 1440},
-        resizeMode: "crop-and-scale"
+        //resizeMode: "crop-and-scale"
       }, 
       audio:{
         deviceId: srcAudio,
@@ -61,6 +65,7 @@ function setStream() {
       alert('SetStream Error: Stream failed to initialize. Current settings may be incompatible with selected hardware sources.');
     });
   }
+  // Update Mute Status
   if (srcAudio == "none") {
     video.muted = true;
   } else {
@@ -76,6 +81,7 @@ function setStream() {
 // Minimize
 document.querySelector('#appMin').onclick = function() {
   ipc.send('minimize');
+  ipc.send('gpustatus');
 }
 
 // Maximize
@@ -173,7 +179,6 @@ function closeSettings() {
   settings.style.opacity = 0;
   settings.style.pointerEvents = "none";
   inSettings = false;
-  setStream();
 }
 settings.onclick = function() {
   closeSettings();
@@ -255,9 +260,15 @@ function getResY() {
   } 
 }
 
+// Video Resize Mode (objectFit)
 let videoResize = document.querySelector('#videoResize');
 videoResize.onchange = function() {
   video.style.objectFit = this.value;
+}
+
+// Toggle Aspect Ratio
+document.querySelector('#selRatio').onchange = function() {
+  ipc.send('toggleRatio', this.value);
 }
 
 // Hide Menu

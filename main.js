@@ -9,7 +9,7 @@ function createWindow() {
         webPreferences:{
             nodeIntegration: true,
             contextIsolation: false,
-            devTools: false
+            devTools: true
         }
     })
 
@@ -18,19 +18,38 @@ function createWindow() {
     mainWindow.loadFile('render/index.html')
 
     ipcMain.on('msg', (e, data)=>{
-        console.warn(data)
+      console.warn(data)
     })
     ipcMain.on('close', () => {
+      if (process.platform !== 'darwin') {
         app.quit()
+      }
     })
     ipcMain.on('fullScreen', () => {
-        mainWindow.setFullScreen(true);
+      mainWindow.setFullScreen(true);
     })
     ipcMain.on('windowScreen', () => {
-        mainWindow.setFullScreen(false);
+      mainWindow.setFullScreen(false);
     })
     ipcMain.on('minimize', () => {
-        mainWindow.minimize();
+      mainWindow.minimize();
+    })
+
+    ipcMain.on('toggleRatio', (evt, data) => {
+      let ratio = 0;
+      if (data == 'unlocked') {
+        ratio = 0;
+      } else if (data == '169') {
+        ratio = (16/9);
+      } else if (data == '1610') {
+        ratio = (16/10);
+      }
+      mainWindow.setAspectRatio(ratio);
+    })
+
+    // Remove This When Complete
+    ipcMain.on('gpustatus', () => {
+      console.dir(app.getGPUFeatureStatus());
     })
 
 
@@ -38,7 +57,17 @@ function createWindow() {
 
 }
 
+// Toggle, set or don't
+app.disableHardwareAcceleration();
 
 
-app.whenReady().then(createWindow)
+app.whenReady().then(() => {
+  createWindow()
+  
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createWindow()
+    }
+  })
 
+})
