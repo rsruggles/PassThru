@@ -13,17 +13,10 @@ function createWindow() {
         }
     })
 
-
-
     mainWindow.loadFile('render/index.html')
 
-    ipcMain.on('msg', (e, data)=>{
-      console.warn(data)
-    })
     ipcMain.on('close', () => {
-      if (process.platform !== 'darwin') {
-        app.quit()
-      }
+      mainWindow.close();
     })
     ipcMain.on('fullScreen', () => {
       mainWindow.setFullScreen(true);
@@ -52,22 +45,27 @@ function createWindow() {
       console.dir(app.getGPUFeatureStatus());
     })
 
-
+    // Lock the Aspect Ratio
     mainWindow.setAspectRatio(16/9);
 
 }
 
 // Toggle, set or don't
-app.disableHardwareAcceleration();
+//app.disableHardwareAcceleration();
 
-
+// App Is Starting
 app.whenReady().then(() => {
   createWindow()
-  
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
       createWindow()
     }
   })
-
 })
+
+// App Is Stopping
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});

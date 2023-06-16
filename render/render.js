@@ -33,9 +33,7 @@ if (!navigator.mediaDevices?.enumerateDevices) {
 const video = document.querySelector('#passThru');
 
 function setStream() {
-  video.pause();
-  video.removeAttribute('src');
-  video.load();
+  video.muted = true;
 
   srcAudio = document.querySelector('#audioInput').value;
   srcVideo = document.querySelector('#videoInput').value;
@@ -58,7 +56,7 @@ function setStream() {
     .then(stream => {
       video.srcObject = stream;
       video.onloadedmetadata = (e) => {
-      video.play();
+        video.play();
       };
     })
     .catch( () => {
@@ -66,9 +64,7 @@ function setStream() {
     });
   }
   // Update Mute Status
-  if (srcAudio == "none") {
-    video.muted = true;
-  } else {
+  if (srcAudio !== "none") {
     video.muted = false;
   }
 }
