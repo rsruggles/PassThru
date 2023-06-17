@@ -39,6 +39,7 @@
 .col-4 {width: 33.33333333333333%;}
 .col-5 {width: 41.66666666666667%;}
 .col-6 {width: 50%;}
+.col-half {width: 50%;}
 .col-7 {width: 58.333333333333336%;}
 .col-8 {width: 66.66666666666666%;}
 .col-9 {width: 75%;}
@@ -95,6 +96,7 @@
 
 /* Mobile CSS Styles */
 @media only screen and (max-width: 680px) {
+
   /* Default to full width */
   .col-1,
   .col-2,
@@ -125,11 +127,11 @@
   .sm-11 {width: 91.66666666666666%;}
   .sm-12 {width: 100%;}
 
-
   /* Page Container */
   .container {
     padding: 0rem 0rem;
     margin: 0rem 0.9375rem;
     width: 100%;
   }
+
 }

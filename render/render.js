@@ -77,7 +77,6 @@ function setStream() {
 // Minimize
 document.querySelector('#appMin').onclick = function() {
   ipc.send('minimize');
-  ipc.send('gpustatus');
 }
 
 // Maximize
@@ -86,14 +85,13 @@ function toggleScreen() {
   if (fullScreen) {
     appMax.classList.add('icon-fullscreen')
     appMax.classList.remove('icon-fullscreen_exit');
-    ipc.send('windowScreen');
     fullScreen = false
   } else {
     appMax.classList.add('icon-fullscreen_exit')
     appMax.classList.remove('icon-fullscreen');
-    ipc.send('fullScreen');
     fullScreen = true
   }
+  ipc.send('togFullscreen', fullScreen);
 }
 appMax.onclick = function() {
   toggleScreen();
@@ -291,3 +289,6 @@ function hideMenu() {
     showMenu = false;
   }
 };
+
+// Parse GPU Status
+ipc.send('gpustatus');
