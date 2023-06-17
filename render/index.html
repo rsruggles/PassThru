@@ -61,9 +61,12 @@
             <option value="720">1280x720</option>
             <option value="1080" selected>1920x1080</option>
             <option value="1440">2560x1440</option>
+            <option value="uw1440">3440x1440 (UW)</option>
           </select>
           <select id="videoFPS" name="videoFPS" onchange="setStream()">
             <option value="null">FPS: Vertical Sync</option>
+            <option value="144">FPS: 144</option>
+            <option value="120">FPS: 120</option>
             <option value="60" selected>FPS: 60</option>
             <option value="30">FPS: 30</option>
             <option value="29">FPS: 29</option>
@@ -78,8 +81,9 @@
           </select>
           <select id="selRatio" name="selRatio">
             <option value="unlocked">Aspect Ratio: Unlocked</option>
-            <option value="169" selected>Aspect Ratio: 16:9</option>
-            <option value="1610">Aspect Ratio: 16:10</option>
+            <option value="16/10">Aspect Ratio: 16:10</option>
+            <option value="16/9" selected>Aspect Ratio: 16:9</option>
+            <option value="43/18">Aspect Ratio: 43:18</option>
           </select>
 
           <input type="checkbox" id="hwAccel" name="hwAccel" value="true" checked onchange="">

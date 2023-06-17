@@ -1,5 +1,3 @@
-const ipc = require('electron').ipcRenderer;
-
 let fullScreen = false
 let inSettings = false
 let srcAudio = "none";
@@ -76,35 +74,35 @@ function setStream() {
 
 // Minimize
 document.querySelector('#appMin').onclick = function() {
-  ipc.send('minimize');
+  api.appMinimize();
 }
 
 // Maximize
-let appMax = document.querySelector('#appMax');
+let appMax = document.querySelector('#appMax')
 function toggleScreen() {
   if (fullScreen) {
     appMax.classList.add('icon-fullscreen')
-    appMax.classList.remove('icon-fullscreen_exit');
+    appMax.classList.remove('icon-fullscreen_exit')
     fullScreen = false
   } else {
     appMax.classList.add('icon-fullscreen_exit')
-    appMax.classList.remove('icon-fullscreen');
+    appMax.classList.remove('icon-fullscreen')
     fullScreen = true
   }
-  ipc.send('togFullscreen', fullScreen);
+  api.appFullScreen(fullScreen);
 }
 appMax.onclick = function() {
-  toggleScreen();
+  toggleScreen()
 }
 document.ondblclick = function() {
   if (!inSettings) {
-    toggleScreen();
+    toggleScreen()
   }
 }
 
 // Exit
 document.querySelector('#appExit').onclick = function() {
-  ipc.send('close');
+  api.appClose()
 }
 
 // Volume
@@ -223,6 +221,9 @@ function getResX() {
     case "1440":
       return(2560)
       break;
+    case "uw1440":
+      return(3440)
+      break;
     default:
       return(1920)
   } 
@@ -249,6 +250,9 @@ function getResY() {
     case "1440":
       return(1440)
       break;
+    case "uw1440":
+      return(1440)
+      break;
     default:
       return(1080)
   } 
@@ -262,7 +266,7 @@ videoResize.onchange = function() {
 
 // Toggle Aspect Ratio
 document.querySelector('#selRatio').onchange = function() {
-  ipc.send('toggleRatio', this.value);
+  api.appAspectRatio(this.value)
 }
 
 // Hide Menu
@@ -291,4 +295,4 @@ function hideMenu() {
 };
 
 // Parse GPU Status
-ipc.send('gpustatus');
+api.appGpuStatus()
