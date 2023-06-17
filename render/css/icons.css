@@ -28,42 +28,63 @@
 .icon-close:before {
   content: "\e900";
 }
-.icon-fullscreen:before {
+.icon-folder_managed:before {
   content: "\e901";
 }
-.icon-fullscreen_exit:before {
+.icon-fullscreen:before {
   content: "\e902";
 }
-.icon-kb_return:before {
+.icon-fullscreen_exit:before {
   content: "\e903";
 }
-.icon-menu:before {
+.icon-kb_return:before {
   content: "\e904";
 }
-.icon-mic:before {
+.icon-menu:before {
   content: "\e905";
 }
-.icon-minimize:before {
+.icon-mic:before {
   content: "\e906";
 }
-.icon-screen_capture:before {
+.icon-minimize:before {
   content: "\e907";
 }
-.icon-screen_rotation:before {
+.icon-passthru:before {
   content: "\e908";
 }
-.icon-settings:before {
+.icon-save:before {
   content: "\e909";
 }
-.icon-videocam:before {
+.icon-save_as:before {
   content: "\e90a";
 }
-.icon-videocam2:before {
+.icon-screen_capture:before {
   content: "\e90b";
 }
-.icon-volume_off:before {
+.icon-screen_record:before {
   content: "\e90c";
 }
-.icon-volume_up:before {
+.icon-screen_rotation:before {
   content: "\e90d";
+}
+.icon-settings:before {
+  content: "\e90e";
+}
+.icon-stop:before {
+  content: "\e90f";
+}
+.icon-videocam:before {
+  content: "\e910";
+}
+.icon-videocam_off:before {
+  content: "\e911";
+}
+.icon-videocam2:before {
+  content: "\e912";
+}
+.icon-volume_off:before {
+  content: "\e913";
+}
+.icon-volume_up:before {
+  content: "\e914";
 }
