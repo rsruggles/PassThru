@@ -1,54 +1,71 @@
-let fullScreen = false
-let inSettings = false
-let srcAudio = "none";
-let srcVideo = "none";
+// Constants
+const video = document.querySelector('#passThru')
+const videoInput = document.querySelector('#selVideoInput')
+const videoResolution = document.querySelector('#selResolution')
+const videoFPS = document.querySelector('#selFPS')
+const videoResize = document.querySelector('#selResize')
+const videoRatio = document.querySelector('#selRatio')
+const chkHW = document.querySelector('#chkHW')
+const audioInput = document.querySelector('#selAudioInput')
+const chkGain = document.querySelector('#chkGain')
+const chkEcho = document.querySelector('#chkEcho')
+const chkNoise = document.querySelector('#chkNoise')
 
+// Variables
+var fullScreen = false
+var inSettings = false
+var srcAudio = "none";
+var srcVideo = "none";
+var appSettings;
+
+////////////////////////////
+//   POPULATE DEVICE LIST //
+////////////////////////////
 if (!navigator.mediaDevices?.enumerateDevices) {
   console.log("Something went wrong. You don't seem to have any applicable media devices.");
 } else {
   // List cameras and microphones.
   navigator.mediaDevices
-    .enumerateDevices()
-    .then((devices) => {
-      devices.forEach((device) => {
-        console.log(`${device.kind}: ${device.label} id = ${device.deviceId}`);
-        if (device.kind == 'audioinput') {
-          document.querySelector('#audioInput').innerHTML += `<option value="`+ device.deviceId +`" >`+ device.label +`</option>`;
-        }
-        if (device.kind == 'videoinput') {
-          document.querySelector('#videoInput').innerHTML += `<option value="`+ device.deviceId +`" >`+ device.label +`</option>`;
-        }
-      });
-    })
-    .catch((err) => {
-      console.error(`${err.name}: ${err.message}`);
+  .enumerateDevices()
+  .then((devices) => {
+    devices.forEach((device) => {
+      console.log(`${device.kind}: ${device.label} id = ${device.deviceId}`);
+      if (device.kind == 'audioinput') {
+        audioInput.innerHTML += `<option value="`+ device.deviceId +`" >`+ device.label +`</option>`;
+      }
+      if (device.kind == 'videoinput') {
+        videoInput.innerHTML += `<option value="`+ device.deviceId +`" >`+ device.label +`</option>`;
+      }
     });
+    // Update Settings
+    api.send('reqSettings')
+  })
+  .catch((err) => {
+    console.error(`${err.name}: ${err.message}`);
+  });
 }
   
 ////////////////////
 //   SET STREAM   //
 ////////////////////
-const video = document.querySelector('#passThru');
-
 function setStream() {
   video.muted = true;
-
-  srcAudio = document.querySelector('#audioInput').value;
-  srcVideo = document.querySelector('#videoInput').value;
+  srcAudio = audioInput.value;
+  srcVideo = videoInput.value;
   if (srcVideo != "none") {
     window.navigator.mediaDevices.getUserMedia({ 
       video:{
         deviceId: srcVideo,
         frameRate: getFps(),
-        width: {min: 768, ideal: getResX(), max: 2560},
+        width: {min: 768, ideal: getResX(), max: 2440},
         height: {min: 432, ideal: getResY(), max: 1440},
         //resizeMode: "crop-and-scale"
       }, 
       audio:{
         deviceId: srcAudio,
-        autoGainControl: document.querySelector('#autoGain').checked,
-        echoCancellation: document.querySelector('#echoCancel').checked,
-        noiseSuppression: document.querySelector('#noiseSuppress').checked
+        autoGainControl: chkGain.checked,
+        echoCancellation: chkEcho.checked,
+        noiseSuppression: chkNoise.checked
       } 
     })
     .then(stream => {
@@ -64,6 +81,7 @@ function setStream() {
   // Update Mute Status
   if (srcAudio !== "none") {
     video.muted = false;
+    video.volume = Number(appSettings.audioVolume)
   }
 }
     
@@ -74,7 +92,7 @@ function setStream() {
 
 // Minimize
 document.querySelector('#appMin').onclick = function() {
-  api.appMinimize();
+  api.send('app-minimize')
 }
 
 // Maximize
@@ -89,7 +107,7 @@ function toggleScreen() {
     appMax.classList.remove('icon-fullscreen')
     fullScreen = true
   }
-  api.appFullScreen(fullScreen);
+  api.send('app-fullscreen', (fullScreen))
 }
 appMax.onclick = function() {
   toggleScreen()
@@ -102,7 +120,7 @@ document.ondblclick = function() {
 
 // Exit
 document.querySelector('#appExit').onclick = function() {
-  api.appClose()
+  api.send('app-close', (appSettings))
 }
 
 // Volume
@@ -144,6 +162,7 @@ function updateVolume() {
     volSlider.style.filter = 'saturate(1)';
   }
   video.volume = volume;
+  appSettings.audioVolume = volume
 }
 
 //////////////////
@@ -189,20 +208,17 @@ btnSettings.onclick = function() {
 
 // Video Settings
 function getFps() {
-  let videoFPS = document.querySelector('#videoFPS').value;
   let fps = 60;
-    
-  if (videoFPS == "null") {
+  if (videoFPS.value == "null") {
     fps = null;
   } else {
-    fps = Number(videoFPS)
+    fps = Number(videoFPS.value)
   }
   return(fps);
 }
   
 function getResX() {
-  let videoResolution = document.querySelector('#videoResolution').value;
-  switch(videoResolution) {
+  switch(videoResolution.value) {
     case "432":
       return(768)
       break;
@@ -230,8 +246,7 @@ function getResX() {
 }
 
 function getResY() {
-  let videoResolution = document.querySelector('#videoResolution').value;
-  switch(videoResolution) {
+  switch(videoResolution.value) {
     case "432":
       return(432)
       break;
@@ -259,14 +274,33 @@ function getResY() {
 }
 
 // Video Resize Mode (objectFit)
-let videoResize = document.querySelector('#videoResize');
 videoResize.onchange = function() {
-  video.style.objectFit = this.value;
+  video.style.objectFit = this.value
+  appSettings.videoResize = this.value
 }
 
 // Toggle Aspect Ratio
-document.querySelector('#selRatio').onchange = function() {
-  api.appAspectRatio(this.value)
+videoRatio.onchange = function() {
+  api.send('app-aspect-ratio', (this.value))
+  appSettings.videoRatio = this.value
+}
+
+// Toggle Gain
+chkGain.onchange = function () {
+  appSettings.audioGain = this.checked
+  setStream()
+}
+
+// Toggle Echo
+chkEcho.onchange = function () {
+  appSettings.audioEcho = this.checked
+  setStream()
+}
+
+// Toggle Noise
+chkNoise.onchange = function () {
+  appSettings.audioNoise = this.checked
+  setStream()
 }
 
 // Hide Menu
@@ -294,5 +328,43 @@ function hideMenu() {
   }
 };
 
+// Load Settings
+function loadSettings() {
+  videoInput.value = appSettings.videoDevice
+  videoResolution.value = appSettings.videoResolution
+  videoFPS.value = appSettings.videoFPS
+  videoResize.value = appSettings.videoResize
+  videoRatio.value = appSettings.videoRatio
+  chkHW.checked = appSettings.hwAccelleration
+  audioInput.value = appSettings.audioDevice
+  volSlider.value = appSettings.audioVolume
+  chkGain.checked = appSettings.audioGain
+  chkEcho.checked = appSettings.audioEcho
+  chkNoise.checked = appSettings.audioNoise
+  console.log('settings loaded')
+  setStream()
+}
+
+// Update Settings
+function updateSettings(reloadStream) {
+  appSettings.videoDevice = videoInput.value
+  appSettings.videoResolution = videoResolution.value
+  appSettings.videoFPS = videoFPS.value 
+  appSettings.hwAccelleration = chkHW.checked
+  appSettings.audioDevice = audioInput.value
+  console.log('settings updated')
+  if (reloadStream) {
+    setStream()
+  } else {
+    api.send('restart-warning', (appSettings))
+  }
+}
+
 // Parse GPU Status
-api.appGpuStatus()
+api.send('gpustatus')
+
+api.handle('resSettings', () => function(evt, data) {
+  console.log('receiving settings')
+  appSettings = data
+  loadSettings()
+})

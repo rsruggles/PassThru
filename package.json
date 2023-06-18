@@ -1,6 +1,6 @@
 {
 	"name": "passthru",
-	"version": "0.2.4",
+	"version": "0.2.16",
 	"description": "A/V Capture and Passthrough",
 	"main": "main.js",
 	"scripts": {
@@ -16,12 +16,12 @@
 			"icon": "icon.ico"
 		},
 		"nsis": {
-			"oneClick": true,
+			"oneClick": false,
 			"installerIcon": "icon.ico",
 			"uninstallerIcon": "icon.ico",
 			"uninstallDisplayName": "passthru-uninstaller",
-			"license": "license.md",
-			"allowToChangeInstallationDirectory": false
+			"license": "dist/license.md",
+			"allowToChangeInstallationDirectory": true
 		}
 	},
 	"author": "rsruggles",

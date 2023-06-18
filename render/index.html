@@ -49,31 +49,30 @@
         <div id="videoWrapper" class="inputWrapper">
           <span class="icon-videocam large margAuto"></span>
           <br />
-          <select id="videoInput" name="videoInput" onchange="setStream()">
-            <option value="none" disabled selected>Video Input</option>
+          <select id="selVideoInput" name="videoInput" onchange="updateSettings(true)">
+            <option value="none" disabled>Video Input</option>
           </select>
-
           <br />
-          <select id="videoResolution" name="videoResolution" onchange="setStream()">
+          <select id="selResolution" name="videoResolution" onchange="updateSettings(true)">
             <option value="432">768x432</option>
             <option value="qhd">960x540 (QHD)</option>
             <option value="vita">960x544 (PS Vita)</option>
             <option value="720">1280x720</option>
-            <option value="1080" selected>1920x1080</option>
+            <option value="1080">1920x1080</option>
             <option value="1440">2560x1440</option>
             <option value="uw1440">3440x1440 (UW)</option>
           </select>
-          <select id="videoFPS" name="videoFPS" onchange="setStream()">
+          <select id="selFPS" name="videoFPS" onchange="updateSettings(true)">
             <option value="null">FPS: Vertical Sync</option>
             <option value="144">FPS: 144</option>
             <option value="120">FPS: 120</option>
-            <option value="60" selected>FPS: 60</option>
+            <option value="60">FPS: 60</option>
             <option value="30">FPS: 30</option>
             <option value="29">FPS: 29</option>
             <option value="24">FPS: 24</option>
           </select>
-          <select id="videoResize" name="videoResize">
-            <option value="fill" selected>Resize Mode: Fill</option>
+          <select id="selResize" name="videoResize">
+            <option value="fill">Resize Mode: Fill</option>
             <option value="contain">Resize Mode: Contain</option>
             <option value="cover">Resize Mode: Cover</option>
             <option value="none">Resize Mode: None</option>
@@ -82,30 +81,35 @@
           <select id="selRatio" name="selRatio">
             <option value="unlocked">Aspect Ratio: Unlocked</option>
             <option value="16/10">Aspect Ratio: 16:10</option>
-            <option value="16/9" selected>Aspect Ratio: 16:9</option>
+            <option value="16/9">Aspect Ratio: 16:9</option>
             <option value="43/18">Aspect Ratio: 43:18</option>
           </select>
-
-          <input type="checkbox" id="hwAccel" name="hwAccel" value="true" checked onchange="">
-          <label for="hwAccel">Hardware Acceleration</label>
-
+          <input type="checkbox" id="chkHW" name="hwAccel"  onchange="updateSettings(false)">
+          <label for="hwAccel">Hardware Acceleration *</label>
+          <br />
+          <span class="txtNotice txtRight">* Software Restart Required</span>
         </div>
       </div>
       <div class="col-6 ">
         <div id="audioWrapper" class="inputWrapper">
           <span class="icon-mic large margAuto"></span>
           <br />
-          <select id="audioInput" name="audioInput" onchange="setStream()">
-            <option value="none" disabled selected>Audio Input</option>
+          <select id="selAudioInput" name="audioInput" onchange="updateSettings(true)">
+            <option value="none" disabled>Audio Input</option>
           </select>
           <br />
-          <input type="checkbox" id="autoGain" name="autoGain" value="false" onchange="setStream()">
+          <input type="checkbox" id="chkGain" name="autoGain">
           <label for="gainControl">Gain Control</label><br />
-          <input type="checkbox" id="echoCancel" name="echoCancel" value="false" onchange="setStream()">
+          <input type="checkbox" id="chkEcho" name="echoCancel">
           <label for="echoCancel">Echo Cancellation</label><br />
-          <input type="checkbox" id="noiseSuppress" name="noiseSuppress" value="false" onchange="setStream()">
+          <input type="checkbox" id="chkNoise" name="noiseSuppress">
           <label for="noiseSuppress">Noise Suppression</label>
-
+          <br />
+          <span class="txtNotice">
+            <strong>Notice: </strong>
+            Audio effects attempt to apply in real time. Selecting multiple effects simultaneously may break the audio stream and cause it 
+            to revert to your system's default device. It is recommend to restart PassThru to apply audio effects properly.
+          </span>
         </div>
       </div>
     </div>

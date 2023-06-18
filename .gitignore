@@ -1,4 +1,4 @@
 node_modules/
 dist/
 img/svg/
-settings.json
+render/settings_default.json

@@ -29,6 +29,7 @@ video {
 
 .menu {
   -webkit-app-region: drag;
+  backdrop-filter: blur(5px);
   position: absolute;
   font-size: 2.5rem;
   background-color: rgb(15, 15, 15, .85);
@@ -58,6 +59,19 @@ video {
 }
 .txtCenter {
   text-align: center;
+}
+.txtJustify {
+  text-align: justify;
+}
+.txtNotice {
+  color: rgb(165, 165, 165);
+  display: inline-block;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 77.5%;
+  padding-top: 10px;
+  user-select: none;
+  cursor: default;
+  width: 100%;
 }
 .large {
   font-size: 3.75rem;
@@ -103,8 +117,8 @@ video {
 .inputWrapper {
   background-color: rgb(15, 15, 15, .9);
   border-radius: 2rem;
-  padding: 4rem;
-  height: 345px;
+  padding: 2rem 3.5rem 1rem 3.5rem;
+  height: 325px;
 }
 
 select {
