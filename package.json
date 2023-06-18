@@ -1,6 +1,6 @@
 {
 	"name": "passthru",
-	"version": "0.2.16",
+	"version": "0.2.17",
 	"description": "A/V Capture and Passthrough",
 	"main": "main.js",
 	"scripts": {
