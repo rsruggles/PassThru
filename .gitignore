@@ -2,3 +2,4 @@ node_modules/
 dist/
 render/img/svg/
 render/settings_default.json
+render/settings.json
