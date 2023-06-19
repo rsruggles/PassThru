@@ -1,12 +1,12 @@
 {
-  "videoDevice": "1d902cc7fd4d544ee8ea17e9b20089c37255a7748d1fb9ed568d63b3aa1ff18e",
+  "videoDevice": "none",
   "videoResolution": "1080",
   "videoFPS": "null",
   "videoResize": "fill",
   "videoRatio": "16/9",
   "hwAccelleration": true,
-  "audioDevice": "3236b8faffd1273907e15adda8f4b1ba034b35467f63c6cce682199167138fda",
-  "audioVolume": "0.09",
+  "audioDevice": "none",
+  "audioVolume": "0.5",
   "audioGain": false,
   "audioEcho": false,
   "audioNoise": false
