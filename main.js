@@ -2,7 +2,28 @@ const {app, BrowserWindow, ipcMain, dialog} = require('electron')
 const path = require('path')
 const fs = require('fs')
 
-var appSettings = loadJSON(path.join(__dirname, "render/settings.json"))
+// Set Default Settings
+var appDefaultSettings = {
+  videoDevice:"none",
+  videoResolution:"1080",
+  videoFPS:60,
+  videoResize:"fill",
+  videoRatio:"16/9",
+  hwAccelleration:true,
+  audioDevice:"none",
+  audioGain:false,
+  audioEcho:false,
+  audioNoise:false
+}
+
+// Load settings from file if available
+var appSettings = loadJSON(path.join(app.getPath('userData'), "settings.json"))
+// Settings unavailable, load defaults, create settings file
+if (appSettings === "File Not Found") {
+  appSettings = appDefaultSettings
+  saveJSON(path.join(app.getPath('userData'), "settings.json"), appDefaultSettings)
+  console.log('created file: settings.json in dir: ' + app.getPath('userData'))
+}
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -33,7 +54,7 @@ function createWindow() {
   })
 
   ipcMain.handle('app-close', (evt, data) => {
-    saveJSON(path.join(__dirname, "render/settings.json"), data)
+    saveJSON(path.join(app.getPath('userData'), "settings.json"), data)
     //console.log('Data Type: ' + typeof(data))
     mainWindow.close();
   })
@@ -66,7 +87,7 @@ function createWindow() {
     .then(result => {
       // User Wants to Restart
       if (result.response === 1) {
-        saveJSON(path.join(__dirname, "render/settings.json"), data)
+        saveJSON(path.join(app.getPath('userData'), "settings.json"), data)
         app.relaunch()
         mainWindow.close();
       }
@@ -122,7 +143,7 @@ function loadJSON(filename = '') {
   return JSON.parse(
     fs.existsSync(filename)
       ? fs.readFileSync(filename).toString()
-      : '""'
+      : '"File Not Found"'
   )
 }
 

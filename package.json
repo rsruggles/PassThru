@@ -28,6 +28,6 @@
 	"license": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International Public License",
 	"devDependencies": {
 		"electron": "^25.0.1",
-		"electron-builder": "^23.6.0"
+		"electron-builder": "^24.4.0"
 	}
 }

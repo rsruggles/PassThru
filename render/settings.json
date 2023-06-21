@@ -1,12 +1,11 @@
 {
   "videoDevice": "none",
   "videoResolution": "1080",
-  "videoFPS": "null",
+  "videoFPS": 60,
   "videoResize": "fill",
   "videoRatio": "16/9",
   "hwAccelleration": true,
   "audioDevice": "none",
-  "audioVolume": "0.5",
   "audioGain": false,
   "audioEcho": false,
   "audioNoise": false
