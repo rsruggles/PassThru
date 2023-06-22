@@ -65,7 +65,7 @@ video {
 }
 .txtNotice {
   color: rgb(165, 165, 165);
-  display: inline-block;
+  display: inline-flex;
   font-family: 'Courier New', Courier, monospace;
   font-size: 77.5%;
   padding-top: 10px;
