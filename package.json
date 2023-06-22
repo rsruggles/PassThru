@@ -1,6 +1,6 @@
 {
-	"name": "passthru",
-	"version": "0.2.18",
+	"name": "PassThru",
+	"version": "0.2.20",
 	"description": "A/V Capture and Passthrough",
 	"main": "main.js",
 	"scripts": {
@@ -11,7 +11,8 @@
 		"appId": "PassThru",
 		"win": {
 			"target": [
-				"nsis"
+				"nsis",
+				"zip"
 			],
 			"icon": "icon.ico"
 		},
